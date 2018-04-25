@@ -1,0 +1,15 @@
+mysql:
+  adapter: mysql2
+  host: localhost
+  username: root
+  password:
+  database: chartable
+  charset: utf8
+
+postgresql:
+  adapter: postgresql
+  hostname: localhost
+  username: postgres
+  password:
+  database: chartable
+  encoding: utf8
