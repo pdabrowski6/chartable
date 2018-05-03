@@ -13,12 +13,13 @@ module Chartable
 
       return scope if from_date.nil? && to_date.nil?
 
-      if from_date.nil?
-        scope.where("DATE(#{on}) <= ?", to_date.to_date)
-      elsif to_date.nil?
-        scope.where("DATE(#{on}) >= ?", from_date.to_date)
-      else
-        scope.where("DATE(#{on}) >= ? AND DATE(#{on}) <= ?", from_date.to_date, to_date.to_date)
+      case
+        when from_date.nil?
+          scope.where("DATE(#{on}) <= ?", to_date.to_date)
+        when to_date.nil?
+          scope.where("DATE(#{on}) >= ?", from_date.to_date)
+        else
+          scope.where("DATE(#{on}) >= ? AND DATE(#{on}) <= ?", from_date.to_date, to_date.to_date)
       end
     end
   end
