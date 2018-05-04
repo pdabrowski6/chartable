@@ -39,6 +39,11 @@ User.where(first_name: 'John').where.not(last_name: 'Doe').analytics(:daily)
 
 This gem was tested on the 2.5.0 version. If it's not working with older versions please add a new issue.
 
+## Committers and Contributors
+
+* Paweł Dąbrowski ([rubyhero](https://github.com/rubyhero))
+* Tran Xuan Nam ([namtx](https://github.com/namtx))
+
 ## Copyright
 
 Copyright (c) 2018 Paweł Dąbrowski.
