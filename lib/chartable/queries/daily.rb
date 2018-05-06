@@ -14,6 +14,8 @@ module Chartable
             data.unshift(month_name)
             data.join(" ")
           end
+        elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
+          scope.group("to_char(#{on},'FMMonth DD, YYYY')").size
         else
           scope.group("DATE_FORMAT(#{on}, '%M %d, %Y')").size
         end

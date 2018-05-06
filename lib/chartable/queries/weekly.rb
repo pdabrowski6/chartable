@@ -8,6 +8,8 @@ module Chartable
       def self.call(scope, on:)
         if ActiveRecord::Base.connection.class.to_s.match(/sqlite/i)
           scope.group("strftime('%m/%d/%Y', date(#{on}, 'weekday 0', '-7 days')) || ' - ' || strftime('%m/%d/%Y', date(#{on}, 'weekday 0', '-1 days'))").size
+        elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
+          scope.group("concat(to_char(date_trunc('week', #{on}) + '-1 day', 'MM/DD/YYYY'), ' - ', to_char(date_trunc('week', #{on}) + '5 days', 'MM/DD/YYYY'))").size
         else
           scope.group("CONCAT(DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(1-DAYOFWEEK(#{on})) DAY)), '%m/%d/%Y'), ' - ', DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(7-DAYOFWEEK(#{on})) DAY)),'%m/%d/%Y'))").size
         end

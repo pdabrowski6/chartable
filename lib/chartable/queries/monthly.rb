@@ -12,6 +12,8 @@ module Chartable
             month_number = key.match(/^[0-9]{2}(?= )/).to_s
             key.gsub(month_number, Date::MONTHNAMES[month_number.to_i])
           end
+        elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
+          scope.group("to_char(#{on},'FMMonth YYYY')").size
         else
           scope.group("DATE_FORMAT(#{on},'%M %Y')").size
         end
