@@ -2,11 +2,15 @@ module Chartable
   module Queries
     class Weekly
       # It returns analytics data for the weekly period.
-      # Example output: `{"01/28/18 - 02/03/18" => 1, "02/11/18 - 02/17/18" => 1}`
+      # Example output: `{"01/28/2018 - 02/03/2018" => 1, "02/11/2018 - 02/17/2018" => 1}`
       #
       # @return [Hash]
       def self.call(scope, on:)
-        scope.group("CONCAT(DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(1-DAYOFWEEK(#{on})) DAY)), '%m/%d/%y'), ' - ', DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(7-DAYOFWEEK(#{on})) DAY)),'%m/%d/%y'))").size
+        if ActiveRecord::Base.connection.class.to_s.match(/sqlite/i)
+          scope.group("strftime('%m/%d/%Y', date(#{on}, 'weekday 0', '-7 days')) || ' - ' || strftime('%m/%d/%Y', date(#{on}, 'weekday 0', '-1 days'))").size
+        else
+          scope.group("CONCAT(DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(1-DAYOFWEEK(#{on})) DAY)), '%m/%d/%Y'), ' - ', DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(7-DAYOFWEEK(#{on})) DAY)),'%m/%d/%Y'))").size
+        end
       end
     end
   end
