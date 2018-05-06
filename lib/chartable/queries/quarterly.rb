@@ -19,6 +19,8 @@ module Chartable
 
             key.gsub(month_number, "Q#{quarter}")
           end
+        elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
+          scope.group("concat('Q', to_char(#{on},'Q YYYY'))").size
         else
           scope.group("CONCAT('Q', QUARTER(#{on}), DATE_FORMAT(#{on},' %Y'))").size
         end
