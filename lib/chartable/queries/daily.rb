@@ -6,7 +6,17 @@ module Chartable
       #
       # @return [Hash]
       def self.call(scope, on:)
-        scope.group("DATE_FORMAT(#{on}, '%M %d, %Y')").size
+        if ActiveRecord::Base.connection.class.to_s.match(/sqlite/i)
+          scope.group("strftime('%m %d, %Y', #{on})").size.transform_keys do |key|
+            data = key.split(" ")
+            month_number = data.shift
+            month_name = Date::MONTHNAMES[month_number.to_i]
+            data.unshift(month_name)
+            data.join(" ")
+          end
+        else
+          scope.group("DATE_FORMAT(#{on}, '%M %d, %Y')").size
+        end
       end
     end
   end
