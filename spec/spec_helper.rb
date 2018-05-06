@@ -13,15 +13,12 @@ FactoryBot.define do
 end
 
 RSpec.configure do |config|
-
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean
+    DatabaseCleaner.clean_with :deletion
   end
 
-  config.after(:suite) do
-    DatabaseCleaner.clean
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
   end
 
   config.before(:each) do
@@ -31,5 +28,4 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
 end
