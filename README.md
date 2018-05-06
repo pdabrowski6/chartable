@@ -2,6 +2,8 @@
 
 The Chartable gem is a lightweight and database-level library to transform any Active Record query into analytics hash ready for use with any chart library.
 
+**Supported database engines:** `MySQL`, `PostgreSQL` and `SQLite`
+
 ## Installation
     gem install chartable
 
@@ -43,6 +45,13 @@ This gem was tested on the 2.5.0 version. If it's not working with older version
 
 * Paweł Dąbrowski ([rubyhero](https://github.com/rubyhero))
 * Tran Xuan Nam ([namtx](https://github.com/namtx))
+
+## TODO
+
+* Add the CHANGELOG file
+* Add a separated query class for each database driver
+* When a date period is restricted then return 0 for periods without the data
+* Test code with the older Ruby versions
 
 ## Copyright
 
