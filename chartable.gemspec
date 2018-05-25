@@ -22,5 +22,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "timecop", '~> 0'
   s.add_development_dependency "factory_bot_rails", '>= 4.0.0'
   s.add_development_dependency "database_cleaner", '>= 1.0.0'
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '>= 2.1.0'
 end
