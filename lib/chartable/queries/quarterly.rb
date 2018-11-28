@@ -5,7 +5,7 @@ module Chartable
       # Example output: `{"Q1 2018" => 1, "Q2 2018" => 1}`
       #
       # @return [Hash]
-      def self.call(scope, on:)
+      def self.call(scope, on:, order:)
         if ActiveRecord::Base.connection.class.to_s.match(/sqlite/i)
           scope.group("strftime('%m %Y', #{on})").size.transform_keys do |key|
             month_number = key.match(/^[0-9]{2}(?= )/).to_s
@@ -20,9 +20,9 @@ module Chartable
             key.gsub(month_number, "Q#{quarter}")
           end
         elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
-          scope.group("concat('Q', to_char(#{on},'Q YYYY'))").size
+          scope.group("concat('Q', to_char(#{on},'Q YYYY'))").order("concat('Q', to_char(#{on},'Q YYYY')) #{order}").size
         else
-          scope.group("CONCAT('Q', QUARTER(#{on}), DATE_FORMAT(#{on},' %Y'))").size
+          scope.group("CONCAT('Q', QUARTER(#{on}), DATE_FORMAT(#{on},' %Y'))").order("CONCAT('Q', QUARTER(#{on}), DATE_FORMAT(#{on},' %Y')) #{order}").size
         end
       end
     end
