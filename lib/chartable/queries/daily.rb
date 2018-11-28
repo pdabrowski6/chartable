@@ -5,7 +5,7 @@ module Chartable
       # Example output: `{"October 09, 2018" => 1, "October 10, 2018" => 1}`
       #
       # @return [Hash]
-      def self.call(scope, on:)
+      def self.call(scope, on:, order:)
         if ActiveRecord::Base.connection.class.to_s.match(/sqlite/i)
           scope.group("strftime('%m %d, %Y', #{on})").size.transform_keys do |key|
             data = key.split(" ")
@@ -15,9 +15,9 @@ module Chartable
             data.join(" ")
           end
         elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
-          scope.group("to_char(#{on},'FMMonth DD, YYYY')").size
+          scope.group("to_char(#{on},'FMMonth DD, YYYY')").order("to_char(#{on},'FMMonth DD, YYYY') #{order}").size
         else
-          scope.group("DATE_FORMAT(#{on}, '%M %d, %Y')").size
+          scope.group("DATE_FORMAT(#{on}, '%M %d, %Y')").order("DATE_FORMAT(#{on}, '%M %d, %Y') #{order}").size
         end
       end
     end
