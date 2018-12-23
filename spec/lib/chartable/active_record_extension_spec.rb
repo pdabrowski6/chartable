@@ -14,7 +14,7 @@ describe Chartable::ActiveRecordExtension do
       ).and_return(scope)
       analytics = double('analytics')
       allow(Chartable::Queries::Yearly).to receive(:call).with(
-        scope, on: on
+        scope, on: on, order: 'asc'
       ).and_return(analytics)
 
       expect(User.analytics(:yearly, from: from, to: to, on: on)).to eq(analytics)
