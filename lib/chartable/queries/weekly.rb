@@ -6,9 +6,7 @@ module Chartable
       #
       # @return [Hash]
       def self.call(scope, on:, order:)
-        if ActiveRecord::Base.connection.class.to_s.match(/sqlite/i)
-          scope.group("strftime('%m/%d/%Y', date(#{on}, 'weekday 0', '-7 days')) || ' - ' || strftime('%m/%d/%Y', date(#{on}, 'weekday 0', '-1 days'))").size
-        elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
+        if ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
           scope
             .group(Arel.sql("concat(to_char(date_trunc('week', #{on}) + '-1 day', 'MM/DD/YYYY'), ' - ', to_char(date_trunc('week', #{on}) + '5 days', 'MM/DD/YYYY'))"))
             .order(Arel.sql("concat(to_char(date_trunc('week', #{on}) + '-1 day', 'MM/DD/YYYY'), ' - ', to_char(date_trunc('week', #{on}) + '5 days', 'MM/DD/YYYY')) #{order}")).size

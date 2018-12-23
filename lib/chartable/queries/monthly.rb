@@ -7,12 +7,7 @@ module Chartable
       #
       # @return [Hash]
       def self.call(scope, on:, order:)
-        if ActiveRecord::Base.connection.class.to_s.match(/sqlite/i)
-          scope.group("strftime('%m %Y', #{on})").size.transform_keys do |key|
-            month_number = key.match(/^[0-9]{2}(?= )/).to_s
-            key.gsub(month_number, Date::MONTHNAMES[month_number.to_i])
-          end
-        elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
+        if ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
           scope.group(Arel.sql("#{on}, to_char(#{on},'FMMonth YYYY')")).order(Arel.sql("#{on} #{order}")).size
         else
           scope.group(Arel.sql("#{on}, DATE_FORMAT(#{on},'%M %Y')")).order(Arel.sql("#{on} #{order}")).size
