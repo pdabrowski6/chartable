@@ -37,6 +37,14 @@ You can also call `analytics` on any query:
 User.where(first_name: 'John').where.not(last_name: 'Doe').analytics(:daily)
 ```
 
+### Sorting
+
+With the `0.0.0.3` version is possible to sort results:
+
+```ruby
+User.analytics(:yearly, order: 'desc') # or order: 'asc'
+```
+
 ## Supported Ruby Versions
 
 This gem was tested on the 2.5.0 version. If it's not working with older versions please add a new issue.
