@@ -14,8 +14,8 @@ module Chartable
             .order("concat(to_char(date_trunc('week', #{on}) + '-1 day', 'MM/DD/YYYY'), ' - ', to_char(date_trunc('week', #{on}) + '5 days', 'MM/DD/YYYY')) #{order}").size
         else
           scope
-            .group("CONCAT(DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(1-DAYOFWEEK(#{on})) DAY)), '%m/%d/%Y'), ' - ', DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(7-DAYOFWEEK(#{on})) DAY)),'%m/%d/%Y'))")
-            .order("CONCAT(DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(1-DAYOFWEEK(#{on})) DAY)), '%m/%d/%Y'), ' - ', DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(7-DAYOFWEEK(#{on})) DAY)),'%m/%d/%Y')) #{order}").size
+            .group(Arel.sql("CONCAT(DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(1-DAYOFWEEK(#{on})) DAY)), '%m/%d/%Y'), ' - ', DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(7-DAYOFWEEK(#{on})) DAY)),'%m/%d/%Y'))"))
+            .order(Arel.sql("CONCAT(DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(1-DAYOFWEEK(#{on})) DAY)), '%m/%d/%Y'), ' - ', DATE_FORMAT(DATE(DATE_ADD(#{on}, INTERVAL(7-DAYOFWEEK(#{on})) DAY)),'%m/%d/%Y')) #{order}")).size
         end
       end
     end

@@ -11,7 +11,7 @@ module Chartable
         elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
           scope.group("cast(to_char(#{on},'YYYY') as integer)").order("cast(to_char(#{on},'YYYY') as integer) #{order}").size
         else
-          scope.group("YEAR(#{on})").order("YEAR(#{on}) #{order}").size
+          scope.group(Arel.sql("YEAR(#{on})")).order(Arel.sql("YEAR(#{on}) #{order}")).size
         end
       end
     end
