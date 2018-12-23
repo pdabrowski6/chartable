@@ -13,7 +13,7 @@ module Chartable
             key.gsub(month_number, Date::MONTHNAMES[month_number.to_i])
           end
         elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
-          scope.group("#{on}, to_char(#{on},'FMMonth YYYY')").order("#{on} #{order}").size
+          scope.group(Arel.sql("#{on}, to_char(#{on},'FMMonth YYYY')")).order(Arel.sql("#{on} #{order}")).size
         else
           scope.group(Arel.sql("#{on}, DATE_FORMAT(#{on},'%M %Y')")).order(Arel.sql("#{on} #{order}")).size
         end

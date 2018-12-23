@@ -20,7 +20,7 @@ module Chartable
             key.gsub(month_number, "Q#{quarter}")
           end
         elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
-          scope.group("concat('Q', to_char(#{on},'Q YYYY'))").order("concat('Q', to_char(#{on},'Q YYYY')) #{order}").size
+          scope.group(Arel.sql("concat('Q', to_char(#{on},'Q YYYY'))")).order(Arel.sql("concat('Q', to_char(#{on},'Q YYYY')) #{order}")).size
         else
           scope.group(Arel.sql("CONCAT('Q', QUARTER(#{on}), DATE_FORMAT(#{on},' %Y'))")).order(Arel.sql("CONCAT('Q', QUARTER(#{on}), DATE_FORMAT(#{on},' %Y')) #{order}")).size
         end

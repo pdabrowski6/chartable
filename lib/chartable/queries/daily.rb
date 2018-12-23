@@ -15,7 +15,7 @@ module Chartable
             data.join(" ")
           end
         elsif ActiveRecord::Base.connection.class.to_s.match(/postgresql/i)
-          scope.group("to_char(#{on},'FMMonth DD, YYYY')").order("to_char(#{on},'FMMonth DD, YYYY') #{order}").size
+          scope.group(Arel.sql("to_char(#{on},'FMMonth DD, YYYY')")).order(Arel.sql("to_char(#{on},'FMMonth DD, YYYY') #{order}")).size
         else
           scope.group(Arel.sql("DATE_FORMAT(#{on}, '%M %d, %Y')")).order(Arel.sql("DATE_FORMAT(#{on}, '%M %d, %Y') #{order}")).size
         end
